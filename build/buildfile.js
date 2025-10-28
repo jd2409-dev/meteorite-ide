@@ -9,9 +9,9 @@
  * @returns {import('./lib/bundle').IEntryPoint}
  */
 function createModuleDescription(name) {
-	return {
-		name
-	};
+    return {
+        name
+    };
 }
 
 exports.workerEditor = createModuleDescription('vs/editor/common/services/editorWebWorkerMain');
@@ -24,37 +24,38 @@ exports.workerOutputLinks = createModuleDescription('vs/workbench/contrib/output
 exports.workerBackgroundTokenization = createModuleDescription('vs/workbench/services/textMate/browser/backgroundTokenization/worker/textMateTokenizationWorker.workerMain');
 
 exports.workbenchDesktop = [
-	createModuleDescription('vs/workbench/contrib/debug/node/telemetryApp'),
-	createModuleDescription('vs/platform/files/node/watcher/watcherMain'),
-	createModuleDescription('vs/platform/terminal/node/ptyHostMain'),
-	createModuleDescription('vs/workbench/api/node/extensionHostProcess'),
-	createModuleDescription('vs/workbench/workbench.desktop.main')
+    createModuleDescription('vs/workbench/contrib/debug/node/telemetryApp'),
+    createModuleDescription('vs/platform/files/node/watcher/watcherMain'),
+    createModuleDescription('vs/platform/terminal/node/ptyHostMain'),
+    createModuleDescription('vs/workbench/api/node/extensionHostProcess'),
+    createModuleDescription('vs/workbench/workbench.desktop.main')
 ];
 
 exports.workbenchWeb = createModuleDescription('vs/workbench/workbench.web.main');
+exports.workbenchEduWeb = createModuleDescription('vs/edu/workbench/edu.web.main');
 
 exports.keyboardMaps = [
-	createModuleDescription('vs/workbench/services/keybinding/browser/keyboardLayouts/layout.contribution.linux'),
-	createModuleDescription('vs/workbench/services/keybinding/browser/keyboardLayouts/layout.contribution.darwin'),
-	createModuleDescription('vs/workbench/services/keybinding/browser/keyboardLayouts/layout.contribution.win')
+    createModuleDescription('vs/workbench/services/keybinding/browser/keyboardLayouts/layout.contribution.linux'),
+    createModuleDescription('vs/workbench/services/keybinding/browser/keyboardLayouts/layout.contribution.darwin'),
+    createModuleDescription('vs/workbench/services/keybinding/browser/keyboardLayouts/layout.contribution.win')
 ];
 
 exports.code = [
-	// 'vs/code/electron-main/main' is not included here because it comes in via ./src/main.js
-	// 'vs/code/node/cli' is not included here because it comes in via ./src/cli.js
-	createModuleDescription('vs/code/node/cliProcessMain'),
-	createModuleDescription('vs/code/electron-utility/sharedProcess/sharedProcessMain'),
-	createModuleDescription('vs/code/electron-browser/workbench/workbench'),
+    // 'vs/code/electron-main/main' is not included here because it comes in via ./src/main.js
+    // 'vs/code/node/cli' is not included here because it comes in via ./src/cli.js
+    createModuleDescription('vs/code/node/cliProcessMain'),
+    createModuleDescription('vs/code/electron-utility/sharedProcess/sharedProcessMain'),
+    createModuleDescription('vs/code/electron-browser/workbench/workbench'),
 ];
 
 exports.codeWeb = createModuleDescription('vs/code/browser/workbench/workbench');
 
 exports.codeServer = [
-	// 'vs/server/node/server.main' is not included here because it gets inlined via ./src/server-main.js
-	// 'vs/server/node/server.cli' is not included here because it gets inlined via ./src/server-cli.js
-	createModuleDescription('vs/workbench/api/node/extensionHostProcess'),
-	createModuleDescription('vs/platform/files/node/watcher/watcherMain'),
-	createModuleDescription('vs/platform/terminal/node/ptyHostMain')
+    // 'vs/server/node/server.main' is not included here because it gets inlined via ./src/server-main.js
+    // 'vs/server/node/server.cli' is not included here because it gets inlined via ./src/server-cli.js
+    createModuleDescription('vs/workbench/api/node/extensionHostProcess'),
+    createModuleDescription('vs/platform/files/node/watcher/watcherMain'),
+    createModuleDescription('vs/platform/terminal/node/ptyHostMain')
 ];
 
 exports.entrypoint = createModuleDescription;
