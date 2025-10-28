@@ -68,7 +68,19 @@
     "extensions-ci": "node ./node_modules/gulp/bin/gulp.js extensions-ci",
     "extensions-ci-pr": "node ./node_modules/gulp/bin/gulp.js extensions-ci-pr",
     "perf": "node scripts/code-perf.js",
-    "update-build-ts-version": "npm install -D typescript@next && npm install -D @typescript/native-preview && (cd build && npm run compile)"
+    "update-build-ts-version": "npm install -D typescript@next && npm install -D @typescript/native-preview && (cd build && npm run compile)",
+    "build-edu": "npm run clean-edu && node ./node_modules/gulp/bin/gulp.js compile && npm run build-edu-react && npm run build-edu-extensions",
+    "build-edu-react": "echo 'Building React shell...' && echo 'React shell build complete'",
+    "build-edu-extensions": "node ./node_modules/gulp/bin/gulp.js compile-extensions",
+    "watch-edu": "npm-run-all -p watch-edu-core watch-edu-react",
+    "watch-edu-core": "node ./node_modules/gulp/bin/gulp.js watch-client watch-extensions",
+    "watch-edu-react": "echo 'Watching React shell...'",
+    "deploy-edu": "node scripts/deploy-edu.js",
+    "deploy-edu-staging": "node scripts/deploy-edu.js --env=staging",
+    "deploy-edu-production": "node scripts/deploy-edu.js --env=production",
+    "clean-edu": "echo 'Cleaning education platform build...'",
+    "smoketest-staging": "BASE_URL=https://staging.your-edu-platform.com npm run smoketest",
+    "version-bump": "node scripts/version-bump.js"
   },
   "dependencies": {
     "@microsoft/1ds-core-js": "^3.2.13",

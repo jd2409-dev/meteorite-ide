@@ -1,0 +1,142 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isInstructor() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'instructor';
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // User profiles
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+      
+      // User settings
+      match /settings/{settingId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      // User progress
+      match /progress/{progressId} {
+        allow read: if isOwner(userId) || isInstructor();
+        allow write: if isOwner(userId);
+      }
+    }
+    
+    // Notebooks
+    match /notebooks/{notebookId} {
+      allow read: if isAuthenticated() && (
+        resource.data.visibility == 'public' ||
+        request.auth.uid == resource.data.author ||
+        request.auth.uid in resource.data.get('collaborators', [])
+      );
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.author == request.auth.uid;
+      
+      allow update: if isAuthenticated() && (
+        request.auth.uid == resource.data.author ||
+        request.auth.uid in resource.data.get('collaborators', [])
+      );
+      
+      allow delete: if isAuthenticated() && 
+                       request.auth.uid == resource.data.author;
+      
+      // Notebook cells (subcollection)
+      match /cells/{cellId} {
+        allow read: if isAuthenticated();
+        allow write: if isAuthenticated() && (
+          request.auth.uid == get(/databases/$(database)/documents/notebooks/$(notebookId)).data.author ||
+          request.auth.uid in get(/databases/$(database)/documents/notebooks/$(notebookId)).data.get('collaborators', [])
+        );
+      }
+    }
+    
+    // Assignments
+    match /assignments/{assignmentId} {
+      allow read: if isAuthenticated();
+      allow create: if isInstructor();
+      allow update, delete: if isInstructor() && 
+                               request.auth.uid == resource.data.instructor;
+      
+      // Assignment submissions
+      match /submissions/{submissionId} {
+        allow read: if isAuthenticated() && (
+          isInstructor() ||
+          request.auth.uid == resource.data.studentId
+        );
+        
+        allow create, update: if isAuthenticated() && 
+                                 request.auth.uid == request.resource.data.studentId;
+        
+        allow delete: if isInstructor();
+      }
+    }
+    
+    // Code execution logs
+    match /executions/{executionId} {
+      allow read: if isAuthenticated() && 
+                     request.auth.uid == resource.data.userId;
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid;
+      
+      // Executions are immutable after creation
+      allow update, delete: if false;
+    }
+    
+    // AI usage tracking
+    match /ai_usage/{usageId} {
+      allow read: if isAuthenticated() && (
+        request.auth.uid == resource.data.userId ||
+        isAdmin()
+      );
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid;
+      
+      // Usage records are immutable
+      allow update, delete: if false;
+    }
+    
+    // Classroom/Course management
+    match /courses/{courseId} {
+      allow read: if isAuthenticated() && (
+        request.auth.uid == resource.data.instructor ||
+        request.auth.uid in resource.data.get('students', []) ||
+        resource.data.visibility == 'public'
+      );
+      
+      allow create, update, delete: if isInstructor();
+      
+      // Course announcements
+      match /announcements/{announcementId} {
+        allow read: if isAuthenticated();
+        allow write: if isInstructor();
+      }
+    }
+    
+    // System configuration (admin only)
+    match /config/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}
