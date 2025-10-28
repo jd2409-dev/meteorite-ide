@@ -1,0 +1,86 @@
+.edu-output-panel {
+	margin: 0.5rem 1rem 1rem;
+	border: 1px solid rgba(25, 118, 210, 0.18);
+	border-radius: 10px;
+	overflow: hidden;
+	background-color: rgba(236, 244, 255, 0.7);
+}
+
+.edu-output-panel.is-empty {
+	opacity: 0.85;
+	border-style: dashed;
+}
+
+.edu-output-panel__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.55rem 0.85rem;
+	background: linear-gradient(90deg, rgba(25, 118, 210, 0.16) 0%, rgba(41, 121, 255, 0.24) 100%);
+}
+
+.edu-output-panel__title {
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: #0d47a1;
+}
+
+.edu-output-panel__toggle {
+	border: none;
+	border-radius: 6px;
+	padding: 0.35rem 0.7rem;
+	font-size: 0.75rem;
+	font-weight: 500;
+	cursor: pointer;
+	background: rgba(25, 118, 210, 0.2);
+	color: #0d47a1;
+}
+
+.edu-output-panel__content {
+	padding: 0.9rem 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.edu-output-panel__text {
+	margin: 0;
+	background: rgba(13, 71, 161, 0.1);
+	padding: 0.75rem;
+	border-radius: 6px;
+	font-family: "Fira Code", "Courier New", monospace;
+	font-size: 0.85rem;
+	color: #0d47a1;
+	white-space: pre-wrap;
+}
+
+.edu-output-panel__table-wrapper {
+	overflow-x: auto;
+}
+
+.edu-output-panel__table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.85rem;
+}
+
+.edu-output-panel__table th,
+.edu-output-panel__table td {
+	border: 1px solid rgba(25, 118, 210, 0.2);
+	padding: 0.5rem;
+	text-align: left;
+}
+
+.edu-output-panel__future {
+	padding: 0.75rem;
+	border-radius: 6px;
+	background: rgba(25, 118, 210, 0.12);
+	color: #0d47a1;
+}
+
+.edu-output-panel__empty {
+	padding: 0.5rem;
+	font-size: 0.8rem;
+	color: #1a237e;
+	opacity: 0.7;
+}
