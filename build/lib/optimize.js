@@ -111,10 +111,22 @@ function bundleESMTask(opts) {
             const externalOverride = {
                 name: 'external-override',
                 setup(build) {
-                    // We inline selected modules that are we depend on on startup without
-                    // a conditional `await import(...)` by hooking into the resolution.
-                    build.onResolve({ filter: /^minimist$/ }, () => {
-                        return { path: path_1.default.join(REPO_ROOT_PATH, 'node_modules', 'minimist', 'index.js'), external: false };
+                    const overrides = new Map([
+                        ['minimist', path_1.default.join(REPO_ROOT_PATH, 'node_modules', 'minimist', 'index.js')],
+                        ['react', path_1.default.join(REPO_ROOT_PATH, 'node_modules', 'react', 'index.js')],
+                        ['react/jsx-runtime', path_1.default.join(REPO_ROOT_PATH, 'node_modules', 'react', 'jsx-runtime.js')],
+                        ['react-dom', path_1.default.join(REPO_ROOT_PATH, 'node_modules', 'react-dom', 'index.js')],
+                        ['react-dom/client', path_1.default.join(REPO_ROOT_PATH, 'node_modules', 'react-dom', 'client.js')],
+                        ['scheduler', path_1.default.join(REPO_ROOT_PATH, 'node_modules', 'scheduler', 'index.js')],
+                        ['scheduler/tracing', path_1.default.join(REPO_ROOT_PATH, 'node_modules', 'scheduler', 'tracing.js')],
+                        ['object-assign', path_1.default.join(REPO_ROOT_PATH, 'node_modules', 'object-assign', 'index.js')],
+                    ]);
+                    build.onResolve({ filter: /^(minimist|react(?:\/jsx-runtime)?|react-dom(?:\/client)?|scheduler(?:\/tracing)?|object-assign)$/ }, (args) => {
+                        const override = overrides.get(args.path);
+                        if (override) {
+                            return { path: override, external: false };
+                        }
+                        return undefined;
                     });
                 },
             };
@@ -131,6 +143,9 @@ function bundleESMTask(opts) {
                     '.svg': 'file',
                     '.png': 'file',
                     '.sh': 'file',
+                },
+                define: {
+                    'process.env.NODE_ENV': '"production"'
                 },
                 assetNames: 'media/[name]', // moves media assets into a sub-folder "media"
                 banner: entryPoint.name === 'vs/workbench/workbench.web.main' ? undefined : banner, // TODO@esm remove line when we stop supporting web-amd-esm-bridge
