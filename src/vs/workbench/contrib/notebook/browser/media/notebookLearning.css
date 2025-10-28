@@ -1,0 +1,163 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.edu-learning-mcq {
+    border: 1px solid var(--vscode-contrastBorder, var(--vscode-focusBorder));
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    background-color: var(--vscode-editor-background);
+    color: var(--vscode-editor-foreground);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.edu-learning-mcq__question {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.edu-learning-mcq__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.edu-learning-mcq__tag {
+    background-color: var(--vscode-editorWidget-background);
+    border: 1px solid var(--vscode-editorHoverWidget-border);
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+    font-size: 0.75rem;
+}
+
+.edu-learning-mcq__options {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+    .edu-learning-mcq__options {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+}
+
+.edu-learning-mcq__option {
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--vscode-editorWidget-border);
+    background-color: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: border-color 0.1s ease, background-color 0.1s ease, transform 0.1s ease;
+}
+
+.edu-learning-mcq__option:hover:not([disabled]),
+.edu-learning-mcq__option:focus-visible {
+    border-color: var(--vscode-focusBorder);
+    outline: 2px solid var(--vscode-focusBorder);
+    outline-offset: 2px;
+    background-color: var(--vscode-button-hoverBackground);
+    transform: translateY(-1px);
+}
+
+.edu-learning-mcq__option[disabled] {
+    opacity: 0.7;
+    cursor: default;
+}
+
+.edu-learning-mcq__option--correct {
+    background-color: var(--vscode-testing-iconPassed, #107c10);
+    color: var(--vscode-editor-background);
+    border-color: var(--vscode-testing-iconPassed, #107c10);
+}
+
+.edu-learning-mcq--incorrect .edu-learning-mcq__option[aria-checked="true"] {
+    border-color: var(--vscode-testing-iconFailed, #c50f1f);
+}
+
+.edu-learning-mcq__feedback {
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    min-height: 2rem;
+    background-color: rgba(128, 128, 128, 0.12);
+}
+
+.edu-learning-mcq__feedback--correct {
+    background-color: rgba(0, 128, 0, 0.15);
+    color: var(--vscode-testing-iconPassed, #107c10);
+}
+
+.edu-learning-mcq__feedback--incorrect {
+    background-color: rgba(255, 0, 0, 0.15);
+    color: var(--vscode-testing-iconFailed, #c50f1f);
+}
+
+.edu-learning-mcq__explanation {
+    padding: 0.75rem;
+    border-left: 3px solid var(--vscode-editor-foreground);
+    background-color: rgba(127, 127, 127, 0.08);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.edu-learning-mcq__progress {
+    font-size: 0.8rem;
+    color: var(--vscode-descriptionForeground);
+}
+
+.edu-learning-hints {
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--vscode-editorWidget-border);
+    padding-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.edu-learning-hints__header {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.edu-learning-hints__items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.edu-learning-hints__item {
+    background-color: rgba(0, 0, 0, 0.06);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+.edu-learning-hints__reveal {
+    align-self: flex-start;
+    border: 1px solid var(--vscode-focusBorder);
+    background: transparent;
+    color: var(--vscode-editor-foreground);
+    border-radius: 4px;
+    padding: 0.35rem 0.75rem;
+    cursor: pointer;
+}
+
+.edu-learning-hints__reveal:hover,
+.edu-learning-hints__reveal:focus-visible {
+    background-color: var(--vscode-button-hoverBackground);
+    color: var(--vscode-button-foreground);
+    outline: none;
+}
