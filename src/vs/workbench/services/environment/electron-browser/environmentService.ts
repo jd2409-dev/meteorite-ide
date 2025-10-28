@@ -5,6 +5,7 @@
 
 import { PerformanceMark } from '../../../../base/common/performance.js';
 import { IBrowserWorkbenchEnvironmentService } from '../browser/environmentService.js';
+import type { IEduCompilerServiceConfiguration } from '../../../browser/web.api.js';
 import { IColorScheme, INativeWindowConfiguration, IOSConfiguration, IPath, IPathsToWaitFor } from '../../../../platform/window/common/window.js';
 import { IEnvironmentService, INativeEnvironmentService } from '../../../../platform/environment/common/environment.js';
 import { refineServiceDecorator } from '../../../../platform/instantiation/common/instantiation.js';
@@ -24,133 +25,136 @@ export const INativeWorkbenchEnvironmentService = refineServiceDecorator<IEnviro
  */
 export interface INativeWorkbenchEnvironmentService extends IBrowserWorkbenchEnvironmentService, INativeEnvironmentService {
 
-	// --- Window
-	readonly window: {
-		id: number;
-		handle?: VSBuffer;
-		colorScheme: IColorScheme;
-		maximized?: boolean;
-		accessibilitySupport?: boolean;
-		isInitialStartup?: boolean;
-		isCodeCaching?: boolean;
-		perfMarks: PerformanceMark[];
-	};
+    // --- Window
+    readonly window: {
+        id: number;
+        handle?: VSBuffer;
+        colorScheme: IColorScheme;
+        maximized?: boolean;
+        accessibilitySupport?: boolean;
+        isInitialStartup?: boolean;
+        isCodeCaching?: boolean;
+        perfMarks: PerformanceMark[];
+    };
 
-	// --- Main
-	readonly mainPid: number;
-	readonly os: IOSConfiguration;
-	readonly machineId: string;
-	readonly sqmId: string;
-	readonly devDeviceId: string;
+    // --- Main
+    readonly mainPid: number;
+    readonly os: IOSConfiguration;
+    readonly machineId: string;
+    readonly sqmId: string;
+    readonly devDeviceId: string;
 
-	// --- Paths
-	readonly execPath: string;
-	readonly backupPath?: string;
+    // --- Paths
+    readonly execPath: string;
+    readonly backupPath?: string;
 
-	// --- Development
-	readonly crashReporterDirectory?: string;
-	readonly crashReporterId?: string;
+    // --- Development
+    readonly crashReporterDirectory?: string;
+    readonly crashReporterId?: string;
 
-	// --- Editors to --wait
-	readonly filesToWait?: IPathsToWaitFor;
+    // --- Editors to --wait
+    readonly filesToWait?: IPathsToWaitFor;
 }
 
 export class NativeWorkbenchEnvironmentService extends AbstractNativeEnvironmentService implements INativeWorkbenchEnvironmentService {
 
-	@memoize
-	get mainPid() { return this.configuration.mainPid; }
+    @memoize
+    get mainPid() { return this.configuration.mainPid; }
 
-	@memoize
-	get machineId() { return this.configuration.machineId; }
+    @memoize
+    get machineId() { return this.configuration.machineId; }
 
-	@memoize
-	get sqmId() { return this.configuration.sqmId; }
+    @memoize
+    get sqmId() { return this.configuration.sqmId; }
 
-	@memoize
-	get devDeviceId() { return this.configuration.devDeviceId; }
+    @memoize
+    get devDeviceId() { return this.configuration.devDeviceId; }
 
-	@memoize
-	get remoteAuthority() { return this.configuration.remoteAuthority; }
+    @memoize
+    get remoteAuthority() { return this.configuration.remoteAuthority; }
 
-	@memoize
-	get expectsResolverExtension() { return !!this.configuration.remoteAuthority?.includes('+'); }
+    @memoize
+    get expectsResolverExtension() { return !!this.configuration.remoteAuthority?.includes('+'); }
 
-	@memoize
-	get execPath() { return this.configuration.execPath; }
+    @memoize
+    get execPath() { return this.configuration.execPath; }
 
-	@memoize
-	get backupPath() { return this.configuration.backupPath; }
+    @memoize
+    get backupPath() { return this.configuration.backupPath; }
 
-	@memoize
-	get window() {
-		return {
-			id: this.configuration.windowId,
-			handle: this.configuration.handle,
-			colorScheme: this.configuration.colorScheme,
-			maximized: this.configuration.maximized,
-			accessibilitySupport: this.configuration.accessibilitySupport,
-			perfMarks: this.configuration.perfMarks,
-			isInitialStartup: this.configuration.isInitialStartup,
-			isCodeCaching: typeof this.configuration.codeCachePath === 'string'
-		};
-	}
+    @memoize
+    get window() {
+        return {
+            id: this.configuration.windowId,
+            handle: this.configuration.handle,
+            colorScheme: this.configuration.colorScheme,
+            maximized: this.configuration.maximized,
+            accessibilitySupport: this.configuration.accessibilitySupport,
+            perfMarks: this.configuration.perfMarks,
+            isInitialStartup: this.configuration.isInitialStartup,
+            isCodeCaching: typeof this.configuration.codeCachePath === 'string'
+        };
+    }
 
-	@memoize
-	get windowLogsPath(): URI { return joinPath(this.logsHome, `window${this.configuration.windowId}`); }
+    @memoize
+    get windowLogsPath(): URI { return joinPath(this.logsHome, `window${this.configuration.windowId}`); }
 
-	@memoize
-	get logFile(): URI { return joinPath(this.windowLogsPath, `renderer.log`); }
+    @memoize
+    get logFile(): URI { return joinPath(this.windowLogsPath, `renderer.log`); }
 
-	@memoize
-	get extHostLogsPath(): URI { return joinPath(this.windowLogsPath, 'exthost'); }
+    @memoize
+    get extHostLogsPath(): URI { return joinPath(this.windowLogsPath, 'exthost'); }
 
-	@memoize
-	get webviewExternalEndpoint(): string { return `${Schemas.vscodeWebview}://{{uuid}}`; }
+    @memoize
+    get webviewExternalEndpoint(): string { return `${Schemas.vscodeWebview}://{{uuid}}`; }
 
-	@memoize
-	get skipReleaseNotes(): boolean { return !!this.args['skip-release-notes']; }
+    @memoize
+    get eduCompilerService(): IEduCompilerServiceConfiguration | undefined { return this.configuration.eduCompilerService; }
 
-	@memoize
-	get skipWelcome(): boolean { return !!this.args['skip-welcome']; }
+    @memoize
+    get skipReleaseNotes(): boolean { return !!this.args['skip-release-notes']; }
 
-	@memoize
-	get logExtensionHostCommunication(): boolean { return !!this.args.logExtensionHostCommunication; }
+    @memoize
+    get skipWelcome(): boolean { return !!this.args['skip-welcome']; }
 
-	@memoize
-	get enableSmokeTestDriver(): boolean { return !!this.args['enable-smoke-test-driver']; }
+    @memoize
+    get logExtensionHostCommunication(): boolean { return !!this.args.logExtensionHostCommunication; }
 
-	@memoize
-	get extensionEnabledProposedApi(): string[] | undefined {
-		if (Array.isArray(this.args['enable-proposed-api'])) {
-			return this.args['enable-proposed-api'];
-		}
+    @memoize
+    get enableSmokeTestDriver(): boolean { return !!this.args['enable-smoke-test-driver']; }
 
-		if ('enable-proposed-api' in this.args) {
-			return [];
-		}
+    @memoize
+    get extensionEnabledProposedApi(): string[] | undefined {
+        if (Array.isArray(this.args['enable-proposed-api'])) {
+            return this.args['enable-proposed-api'];
+        }
 
-		return undefined;
-	}
+        if ('enable-proposed-api' in this.args) {
+            return [];
+        }
 
-	@memoize
-	get os(): IOSConfiguration { return this.configuration.os; }
+        return undefined;
+    }
 
-	@memoize
-	get filesToOpenOrCreate(): IPath[] | undefined { return this.configuration.filesToOpenOrCreate; }
+    @memoize
+    get os(): IOSConfiguration { return this.configuration.os; }
 
-	@memoize
-	get filesToDiff(): IPath[] | undefined { return this.configuration.filesToDiff; }
+    @memoize
+    get filesToOpenOrCreate(): IPath[] | undefined { return this.configuration.filesToOpenOrCreate; }
 
-	@memoize
-	get filesToMerge(): IPath[] | undefined { return this.configuration.filesToMerge; }
+    @memoize
+    get filesToDiff(): IPath[] | undefined { return this.configuration.filesToDiff; }
 
-	@memoize
-	get filesToWait(): IPathsToWaitFor | undefined { return this.configuration.filesToWait; }
+    @memoize
+    get filesToMerge(): IPath[] | undefined { return this.configuration.filesToMerge; }
 
-	constructor(
-		private readonly configuration: INativeWindowConfiguration,
-		productService: IProductService
-	) {
-		super(configuration, { homeDir: configuration.homeDir, tmpDir: configuration.tmpDir, userDataDir: configuration.userDataDir }, productService);
-	}
+    @memoize
+    get filesToWait(): IPathsToWaitFor | undefined { return this.configuration.filesToWait; }
+
+    constructor(
+        private readonly configuration: INativeWindowConfiguration,
+        productService: IProductService
+    ) {
+        super(configuration, { homeDir: configuration.homeDir, tmpDir: configuration.tmpDir, userDataDir: configuration.userDataDir }, productService);
+    }
 }
