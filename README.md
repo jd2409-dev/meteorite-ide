@@ -19,6 +19,50 @@ This repository ("`Code - OSS`") is where we (Microsoft) develop the [Visual Stu
 
 Visual Studio Code is updated monthly with new features and bug fixes. You can download it for Windows, macOS, and Linux on [Visual Studio Code's website](https://code.visualstudio.com/Download). To get the latest releases every day, install the [Insiders build](https://code.visualstudio.com/insiders).
 
+## Education Platform
+
+This repository includes an **Education Platform** variant that extends VS Code OSS with specialized features for teaching and learning programming. The education platform provides:
+
+- **Interactive Notebook Environment**: Execute code in multiple languages with real-time output
+- **AI-Powered Learning Assistant**: Context-aware help, code explanations, and debugging assistance
+- **Cloud-Based Code Execution**: Sandboxed compiler API for safe student code execution
+- **Collaborative Features**: Real-time notebook sharing and assignment management
+- **Firebase Integration**: Cloud storage, authentication, and real-time synchronization
+
+### Key Differences from Stock Code OSS
+
+The education platform diverges from the standard VS Code OSS distribution in several ways:
+
+- **React-Based Shell**: Custom UI layer wrapping the Monaco editor for educational workflows
+- **Cloud-First Architecture**: Firebase backend replaces local file storage for persistence
+- **Remote Code Execution**: Student code runs on cloud infrastructure with resource limits
+- **Educational Tooling**: Assignment systems, progress tracking, and instructor dashboards
+- **Built-in AI**: Integrated AI assistance powered by OpenAI or Anthropic models
+
+### Getting Started with Education Platform
+
+For comprehensive setup and deployment instructions:
+
+- **[🚀 Quick Start](./DEPLOY.md)** - Fast deployment guide
+- **[📐 Architecture](./docs/edu/architecture.md)** - System design and technical overview
+- **[⚙️ Setup Guide](./docs/edu/setup.md)** - Detailed configuration instructions
+- **[🔄 CI/CD Workflows](./docs/edu/ci-workflows.md)** - Automated deployment examples
+
+### Building the Education Platform
+
+```bash
+# Install dependencies
+npm install
+
+# Build education platform
+npm run build-edu
+
+# Start development server
+npm run watch-edu
+```
+
+See [DEPLOY.md](./DEPLOY.md) for complete deployment instructions including Firebase configuration, compiler API setup, and hosting options.
+
 ## Contributing
 
 There are many ways in which you can participate in this project, for example:
